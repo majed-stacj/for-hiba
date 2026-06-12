@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Hiba ❤️</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        :root {
+            --red-royal: #9b111e;
+            --red-bright: #c31432;
+            --red-neon: #ff2a42;
+            --black-lux: #050505;
+            --glass-card: rgba(15, 15, 15, 0.88);
+            --text-main: #ffffff;
+            --text-muted: #c9a8ae;
+            --smooth-cubic: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--black-lux);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--black-lux);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.2s var(--smooth-cubic), transform 1.2s var(--smooth-cubic), filter 1.2s var(--smooth-cubic);
+        }
+
+        #preloader.fade-out {
+            opacity: 0;
+            transform: scale(1.05);
+            filter: blur(10px);
+            pointer-events: none;
+        }
+
+        .preloader-container {
+            position: relative;
+            width: min(360px, 90vw);
+            height: min(360px, 90vw);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #splash-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 15px var(--red-bright)) drop-shadow(0 0 35px var(--red-royal));
+        }
+
+        .heart-stroke {
+            fill: transparent;
+            stroke: var(--red-bright);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: sketchHeart 2.5s var(--smooth-cubic) forwards;
+        }
+
+        .heart-inner-fill {
+            fill: var(--red-royal);
+            opacity: 0;
+            animation: saturateHeart 1.5s ease 2s forwards;
+        }
+
+        .hiba-text-path {
+            font-family: 'Playfair Display', serif !important;
+            font-size: 32px;
+            font-style: italic;
+            font-weight: 600;
+            fill: transparent;
+            stroke: #ffffff;
+            stroke-width: 1;
+            stroke-dasharray: 400;
+            stroke-dashoffset: 400;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.6));
+            animation: sketchText 1.8s ease 2.3s forwards, fillText 1s ease 3.8s forwards;
+        }
+
+        @keyframes sketchHeart { to { stroke-dashoffset: 0; } }
+        @keyframes saturateHeart { to { opacity: 0.25; } }
+        @keyframes sketchText { to { stroke-dashoffset: 0; } }
+        @keyframes fillText { to { fill: #ffffff; stroke: transparent; } }
+
+        #app {
+            min-height: 100vh;
+            width: 100%;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(10, 3, 5, 0.4), var(--black-lux)),
+                url('https://wallpapercave.com/wp/wp7743792.jpg') center/cover no-repeat fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            position: relative;
+            z-index: 10;
+        }
+
+        #app.visible { opacity: 1; }
+
+        #ambient-leaves-canvas, #celebration-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+        }
+        #ambient-leaves-canvas { z-index: 2; }
+        #celebration-canvas { z-index: 100; opacity: 0; transition: opacity 1s var(--smooth-cubic); }
+        #celebration-canvas.active { opacity: 1; }
+
+        .card {
+            background: var(--glass-card);
+            border: 1px solid rgba(155, 17, 30, 0.6);
+            border-radius: 12px;
+            box-shadow: 
+                0 0 35px rgba(155, 17, 30, 0.25),
+                0 0 70px rgba(155, 17, 30, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 50px 40px;
+            max-width: 680px;
+            width: 100%;
+            position: relative;
+            z-index: 20;
+        }
+
+        @media (max-width: 768px) { .card { padding: 40px 25px; max-width: 90%; } }
+        @media (max-width: 480px) { .card { padding: 35px 20px; max-width: 95%; } }
+
+        .royal-title {
+            font-family: 'Cinzel', serif !important;
+            font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+            font-weight: 700;
+            color: var(--red-bright);
+            text-shadow: 0 0 15px rgba(195, 20, 50, 0.6), 0 0 5px rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.06em;
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .body-text {
+            font-family: 'Playfair Display', serif !important;
+            font-style: italic;
+            font-size: clamp(1.1rem, 3.2vw, 1.3rem);
+            line-height: 1.8;
+            letter-spacing: 0.02em;
+            color: var(--text-main);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 400;
+            word-spacing: 0.1em;
+        }
+
+        .char-fade {
+            opacity: 0;
+            display: inline-block;
+            white-space: pre-wrap;
+            animation: letterReveal 0.5s ease forwards;
+        }
+
+        @keyframes letterReveal {
+            to { opacity: 1; }
+        }
+
+        .text-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.1em;
+            background-color: var(--red-bright);
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: cursorBlink 0.8s step-end infinite;
+            box-shadow: 0 0 8px var(--red-neon);
+        }
+
+        @keyframes cursorBlink { 50% { opacity: 0; } }
+
+        .btn-wrapper {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.8s var(--smooth-cubic), transform 0.8s var(--smooth-cubic);
+            pointer-events: none;
+        }
+
+        .btn-wrapper.reveal { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+        .action-btn {
+            font-family: 'Cinzel', serif !important;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: transform 0.25s var(--smooth-cubic), box-shadow 0.25s var(--smooth-cubic), border-color 0.3s ease;
+        }
+
+        .action-btn:active { transform: scale(0.95); }
+
+        .btn-gradient-primary {
+            background: linear-gradient(135deg, var(--red-royal), var(--red-bright));
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(155, 17, 30, 0.4);
+        }
+
+        .btn-gradient-primary:hover {
+            transform: scale(1.04) translateY(-2px);
+            box-shadow: 0 8px 28px rgba(195, 20, 50, 0.7);
+        }
+
+        .btn-outline-ghost {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid rgba(155, 17, 30, 0.5);
+        }
+
+        .btn-outline-ghost:hover {
+            transform: scale(1.02);
+            border-color: var(--red-bright);
+            color: var(--text-main);
+            box-shadow: 0 0 15px rgba(155, 17, 30, 0.3);
+        }
+
+        #climax-shield {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(5, 5, 5, 0.92);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            transition: opacity 1.2s var(--smooth-cubic);
+        }
+
+        #climax-shield.active { opacity: 1; }
+
+        .climax-box {
+            background: rgba(15, 15, 15, 0.95);
+            padding: 50px 60px;
+            border-radius: 8px;
+            border: 2px solid var(--red-bright);
+            box-shadow: 0 0 40px var(--red-royal);
+            text-align: center;
+            max-width: 85%;
+        }
+
+        .climax-msg {
+            font-family: 'Playfair Display', serif !important;
+            font-style: italic;
+            font-size: clamp(1.6rem, 5vw, 2.6rem);
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 0 20px var(--red-neon), 0 0 5px #fff;
+            line-height: 1.6;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--red-bright), transparent);
+            margin: 35px 0;
+        }
+
+        .countdown-container {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s var(--smooth-cubic), transform 1s var(--smooth-cubic);
+        }
+        .countdown-container.active { opacity: 1; transform: translateY(0); }
+
+        .countdown-flex {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .time-block {
+            text-align: center;
+            background: rgba(155, 17, 30, 0.15);
+            border: 1px solid rgba(155, 17, 30, 0.45);
+            border-radius: 6px;
+            padding: 14px 18px;
+            min-width: 90px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .digits {
+            font-family: 'Cinzel', serif !important;
+            font-size: clamp(1.8rem, 5.5vw, 2.5rem);
+            font-weight: 700;
+            color: var(--red-bright);
+            text-shadow: 0 0 15px var(--red-royal);
+            line-height: 1;
+            display: block;
+        }
+
+        .time-label {
+            font-family: 'Cinzel', serif !important;
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 6px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .comment-section {
+            margin-top: 40px;
+            border-top: 1px solid rgba(155,17,30,0.3);
+            padding-top: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s var(--smooth-cubic), transform 1s var(--smooth-cubic);
+        }
+        .comment-section.active { opacity: 1; transform: translateY(0); }
+
+        .small-joke {
+            font-family: 'Playfair Display', serif !important;
+            font-style: italic;
+            font-size: 1rem;
+            color: #ff9ebb;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            text-shadow: 0 0 5px rgba(255, 42, 66, 0.3);
+            line-height: 1.6;
+        }
+
+        .lux-form { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+
+        .lux-textarea {
+            font-family: 'Playfair Display', serif !important;
+            width: 100%;
+            height: 110px;
+            background: rgba(5, 5, 5, 0.85);
+            border: 1px solid rgba(155, 17, 30, 0.5);
+            border-radius: 4px;
+            padding: 14px;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            font-weight: 500;
+            resize: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .lux-textarea:focus {
+            outline: none;
+            border-color: var(--red-bright);
+            box-shadow: 0 0 12px rgba(195, 20, 50, 0.5);
+        }
+
+        .royal-footer {
+            font-family: 'Cinzel', serif !important;
+            text-align: center;
+            margin-top: 45px;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: rgba(201, 168, 174, 0.4);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .meme-container {
+            display: flex; justify-content: center; align-items: center; margin: 24px 0; width: 100%; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.8s var(--smooth-cubic), opacity 0.8s var(--smooth-cubic);
+        }
+        .meme-container.expanded { max-height: 260px; opacity: 1; }
+        .meme-container img { max-width: min(300px, 85vw); max-height: 220px; object-fit: cover; border-radius: 8px; border: 2px solid rgba(195, 20, 50, 0.4); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6); }
+        .state-block { transition: opacity 0.6s ease; }
+        .state-block.fading-out { opacity: 0; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="preloader-container">
+            <svg id="splash-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path class="heart-inner-fill" d="M100,165 C60,140 15,110 15,65 C15,35 35,15 60,15 C75,15 90,23 100,40 C110,23 125,15 145,15 C170,15 190,35 190,65 C190,110 140,140 100,165 Z"/>
+                <path class="heart-stroke" d="M100,165 C60,140 15,110 15,65 C15,35 35,15 60,15 C75,15 90,23 100,40 C110,23 125,15 145,15 C170,15 190,35 190,65 C190,110 140,140 100,165 Z"/>
+                <text x="100" y="75" class="hiba-text-path">Hiba</text>
+            </svg>
+        </div>
+    </div>
+
+    <canvas id="ambient-leaves-canvas"></canvas>
+    <canvas id="celebration-canvas"></canvas>
+
+    <div id="climax-shield">
+        <div class="climax-box">
+            <p class="climax-msg">The gorgeous princesse ,<br>thank u again ❤️</p>
+        </div>
+    </div>
+
+    <div id="app">
+        <div class="card">
+
+            <div id="state1" class="state-block">
+                <h1 class="royal-title" id="s1-header"></h1>
+                <p class="body-text" id="s1-subtext"></p>
+                
+                <div class="meme-container" id="container-meme1">
+                    <img src="" alt="Welcome Interface View" id="img-meme1">
+                </div>
+                
+                <div class="btn-wrapper" id="wrap-btns1">
+                    <button class="action-btn btn-gradient-primary" id="act-tellme">tell me</button>
+                    <button class="action-btn btn-outline-ghost" id="act-dont">don't</button>
+                </div>
+            </div>
+
+            <div id="state2" class="state-block" style="display: none;">
+                <h1 class="royal-title">🌹 Smhi lia</h1>
+                
+                <div class="meme-container" id="container-meme2">
+                    <img src="" alt="Apology Secondary View" id="img-meme2">
+                </div>
+                
+                <p class="body-text" id="s2-apology-payload"></p>
+                
+                <div class="btn-wrapper" id="wrap-btns2">
+                    <button class="action-btn btn-gradient-primary" id="act-forgive">I forgive u</button>
+                    <button class="action-btn btn-outline-ghost" id="act-noforgive">I don't forgive u</button>
+                </div>
+            </div>
+
+            <div id="state3" class="state-block" style="display: none;">
+                <h1 class="royal-title">❤️ Thank u</h1>
+                <p class="body-text" id="s3-acceptance-payload"></p>
+            </div>
+
+            <div id="state4" class="state-block" style="display: none;">
+                <div class="divider"></div>
+                <p class="body-text" id="s4-countdown-payload"></p>
+                
+                <div class="countdown-container" id="countdown-board">
+                    <div class="countdown-flex">
+                        <div class="time-block"><span class="digits" id="val-days">000</span><span class="time-label">Days</span></div>
+                        <div class="time-block"><span class="digits" id="val-hrs">00</span><span class="time-label">Hours</span></div>
+                        <div class="time-block"><span class="digits" id="val-mins">00</span><span class="time-label">Minutes</span></div>
+                        <div class="time-block"><span class="digits" id="val-secs">00</span><span class="time-label">Seconds</span></div>
+                    </div>
+                    <p class="body-text" style="font-size: 0.95rem; color: var(--text-muted);">rej3i hna mni iqreb lweqt atsnak chi haja zwina bhalk 😉</p>
+                </div>
+
+                <div class="comment-section" id="haircut-joke-gate">
+                    <h2 class="royal-title" style="font-size: 1.3rem; margin-bottom: 5px;">What do u think about my haircut?</h2>
+                    <p class="small-joke">I think it's bad?, I wish my hair would grow back. ach ban lk fl website , write what u want ay haja atktebiha an3rfha</p>
+                    
+                    <form action="https://formspree.io/f/xkoaqdjp" method="POST" class="lux-form" id="async-comment-form">
+                        <textarea name="hiba_comment" class="lux-textarea" placeholder="WRITE YOUR RESPONSE HERE..." required></textarea>
+                        <button type="submit" class="action-btn btn-gradient-primary" style="align-self: center;">Send Response</button>
+                    </form>
+                </div>
+            </div>
+
+            <footer class="royal-footer">
+                Crafted by MajedDev
+            </footer>
+
+        </div>
+    </div>
+
+    <script>
+        const triggerDelay = ms => new Promise(res => setTimeout(res, ms));
+
+        async function runTypewriter(targetElement, fullString, charactersPerSec = 45) {
+            targetElement.innerHTML = '';
+            const structuralCursor = document.createElement('span');
+            structuralCursor.className = 'text-cursor';
+            targetElement.appendChild(structuralCursor);
+
+            for (const character of fullString) {
+                const charSpan = document.createElement('span');
+                charSpan.className = 'char-fade';
+                charSpan.textContent = character;
+                
+                targetElement.insertBefore(charSpan, structuralCursor);
+                await triggerDelay(charactersPerSec + Math.random() * 15);
+            }
+            structuralCursor.remove();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            const app = document.getElementById('app');
+
+            initAmbientLeaves();
+
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    app.classList.add('visible');
+                    executeState1();
+                }, 1200);
+            }, 4200);
+        });
+
+        async function executeState1() {
+            const header = document.getElementById('s1-header');
+            const subtext = document.getElementById('s1-subtext');
+            const memeContainer = document.getElementById('container-meme1');
+            const btnRow = document.getElementById('wrap-btns1');
+            const refuseBtn = document.getElementById('act-dont');
+            const confirmBtn = document.getElementById('act-tellme');
+
+            await runTypewriter(header, 'Welcome, the prettiest girl is here ✨', 55);
+            await triggerDelay(400);
+            await runTypewriter(subtext, 'I wanna tell u something', 50);
+            await triggerDelay(300);
+
+            const imgElement = document.getElementById('img-meme1');
+            if (imgElement && imgElement.getAttribute('src') && imgElement.getAttribute('src').trim() !== '') {
+                memeContainer.classList.add('expanded');
+                await triggerDelay(300);
+            }
+
+            btnRow.classList.add('reveal');
+
+            let resistanceCount = 0;
+            refuseBtn.addEventListener('click', async () => {
+                resistanceCount++;
+                btnRow.style.pointerEvents = 'none';
+                
+                if (resistanceCount === 1) {
+                    await runTypewriter(subtext, "Please ghir had lmera sm3ini 🥺", 35);
+                    btnRow.style.pointerEvents = 'all';
+                } else if (resistanceCount === 2) {
+                    await runTypewriter(subtext, "Please ghir clicki 3la 'tell me' ...", 35);
+                    refuseBtn.style.opacity = '0';
+                    setTimeout(() => refuseBtn.remove(), 500);
+                    btnRow.style.pointerEvents = 'all';
+                }
+            });
+
+            confirmBtn.addEventListener('click', async () => {
+                btnRow.classList.remove('reveal');
+                document.getElementById('state1').classList.add('fading-out');
+                await triggerDelay(600);
+                document.getElementById('state1').style.display = 'none';
+                executeState2();
+            });
+        }
+
+        async function executeState2() {
+            const state2 = document.getElementById('state2');
+            const apologyTextEl = document.getElementById('s2-apology-payload');
+            const memeContainer = document.getElementById('container-meme2');
+            const btnRow = document.getElementById('wrap-btns2');
+            const forgiveBtn = document.getElementById('act-forgive');
+            const rejectForgivenessBtn = document.getElementById('act-noforgive');
+
+            state2.style.display = 'block';
+            await triggerDelay(50);
+
+            const imgElement = document.getElementById('img-meme2');
+            if (imgElement && imgElement.getAttribute('src') && imgElement.getAttribute('src').trim() !== '') {
+                memeContainer.classList.add('expanded');
+            }
+
+            const masterApologyText = `Look beauty I know what I did , smhi lia bzaf 3arf rassi qalqetk u ana ma7meltch rassi nqelq chi wehda bhad zin , ana 3rft zedt fih b kola merra kangolk smhi lia walakin qelbi ma berdch , smhi lia bnisba lia machi ghir kelma bel hia i3tiraf mni lk bli m3azetk kbira fqelbi bzaf u machi ay m3aza 3adia, i don't wanna lose someone special like u , u r the best person i met in my life , kola makndwi meak kanhes bl ferha u bzaf dyal fellings , U r not just a passing person to me, u r an exception. ur existing in my life means a lot to me u r so sweet kind and so fk pretty , emrni ansa fach dima knti katji mni fl groupe, saraha dwzna weqita zwina dak leamu u dima kanhes bchi haja katjdbni lk , how i can describe it, makrehtch insha'allah leam jay nkono bjoj f nefs lqism , u don't know how I missed u had leam kola ma kanchofk wla fach maktjich kanbqa ngoul imta atji wakha bzaf mabqitch  kandwi meak wla kanji endk sorry again sometimes kanwli bhal chi autistic , I hope u forgive me hadchi bnisba lia makafich u deserve more walakin hadchi li nqdr elih db`;
+
+            await runTypewriter(apologyTextEl, masterApologyText, 35);
+            await triggerDelay(400);
+            btnRow.classList.add('reveal');
+
+            let refusalLevel = 0;
+            rejectForgivenessBtn.addEventListener('click', async () => {
+                btnRow.style.pointerEvents = 'none';
+                refusalLevel++;
+                
+                if (refusalLevel === 1) {
+                    await runTypewriter(apologyTextEl, "smhi lia a lala wmolati hiba 3mer hadchi aytera tani 🥺", 35);
+                    btnRow.style.pointerEvents = 'all';
+                } else if (refusalLevel === 2) {
+                    await runTypewriter(apologyTextEl, "mn ghir sma7 khassk t3erfi blasstk endi chi 7aja okhera u maknst7melch nchofk mqelqa mni ❤️", 35);
+                    rejectForgivenessBtn.style.opacity = '0';
+                    setTimeout(() => rejectForgivenessBtn.remove(), 510);
+                    btnRow.style.pointerEvents = 'all';
+                }
+            });
+
+            forgiveBtn.addEventListener('click', async () => {
+                btnRow.classList.remove('reveal');
+                state2.classList.add('fading-out');
+                await triggerDelay(600);
+                state2.style.display = 'none';
+                executeState3();
+            });
+        }
+
+        async function executeState3() {
+            const state3 = document.getElementById('state3');
+            const textEl = document.getElementById('s3-acceptance-payload');
+            const climaxShield = document.getElementById('climax-shield');
+
+            state3.style.display = 'block';
+            await runTypewriter(textEl, "Thank u honey for forgiving me , manqderch nsameh rassi ela ga3 dakchi li derto fheqk ❤️", 40);
+
+            fireCelebrationCanvas();
+            await triggerDelay(1000);
+
+            climaxShield.classList.add('active');
+            await triggerDelay(5000);
+            climaxShield.classList.remove('active');
+            
+            await triggerDelay(800);
+            executeState4();
+        }
+
+        async function executeState4() {
+            const state4 = document.getElementById('state4');
+            const introEl = document.getElementById('s4-countdown-payload');
+            const board = document.getElementById('countdown-board');
+            const jokeGate = document.getElementById('haircut-joke-gate');
+
+            state4.style.display = 'block';
+            await runTypewriter(introEl, "by the way akher merra glt lik i forget ur birthday but know i have a surprise 🎁", 40);
+            
+            await triggerDelay(400);
+            board.classList.add('active');
+            initializeLiveTimelock();
+
+            await triggerDelay(1200);
+            jokeGate.classList.add('active');
+        }
+
+        function initializeLiveTimelock() {
+            const architecturalTarget = new Date('2026-12-31T00:00:00').getTime();
+            const formatPad = (value, width = 2) => String(value).padStart(width, '0');
+
+            function computeInterval() {
+                const liveNow = Date.now();
+                const metricsDiff = Math.max(0, architecturalTarget - liveNow);
+
+                const computedDays = Math.floor(metricsDiff / 86400000);
+                const computedHrs  = Math.floor((metricsDiff % 86400000) / 3600000);
+                const computedMins = Math.floor((metricsDiff % 3600000) / 60000);
+                const computedSecs = Math.floor((metricsDiff % 60000) / 1000);
+
+                document.getElementById('val-days').textContent = formatPad(computedDays, 3);
+                document.getElementById('val-hrs').textContent  = formatPad(computedHrs);
+                document.getElementById('val-mins').textContent = formatPad(computedMins);
+                document.getElementById('val-secs').textContent = formatPad(computedSecs);
+            }
+            computeInterval();
+            setInterval(computeInterval, 1000);
+        }
+
+        function initAmbientLeaves() {
+            const canvas = document.getElementById('ambient-leaves-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+
+            function syncSize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            syncSize();
+            window.addEventListener('resize', syncSize);
+
+            const cluster = [];
+            for (let i = 0; i < 30; i++) {
+                cluster.push({
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    r: 4 + Math.random() * 6,
+                    d: Math.random() * w,
+                    speed: 0.4 + Math.random() * 0.8,
+                    sway: Math.random() * 2,
+                    color: Math.random() > 0.5 ? 'rgba(155, 17, 30, 0.25)' : 'rgba(195, 20, 50, 0.15)'
+                });
+            }
+
+            function cycle() {
+                ctx.clearRect(0, 0, w, h);
+                for (let i = 0; i < cluster.length; i++) {
+                    const p = cluster[i];
+                    ctx.beginPath();
+                    ctx.fillStyle = p.color;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.ellipse(p.x, p.y, p.r, p.r * 1.8, p.sway, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    p.y += p.speed;
+                    p.sway += 0.01;
+                    p.x += Math.sin(p.sway) * 0.3;
+
+                    if (p.y > h) {
+                        cluster[i] = { ...p, x: Math.random() * w, y: -20, sway: Math.random() * 2 };
+                    }
+                }
+                requestAnimationFrame(cycle);
+            }
+            cycle();
+        }
+
+        function fireCelebrationCanvas() {
+            const canvas = document.getElementById('celebration-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.classList.add('active');
+
+            let w, h;
+            function syncSize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            syncSize();
+            window.addEventListener('resize', syncSize);
+
+            const cluster = [];
+            class ElegantVectorParticle {
+                constructor() { this.spawn(true); }
+                spawn(initialBoot = false) {
+                    this.x = Math.random() * w;
+                    this.y = initialBoot ? Math.random() * h : -50;
+                    this.velocityDown = 0.8 + Math.random() * 1.5;
+                    this.velocityCross = (Math.random() - 0.5) * 0.8;
+                    this.rotationRad = Math.random() * Math.PI * 2;
+                    this.rotationVelocity = (Math.random() - 0.5) * 0.03;
+                    this.scaleSize = 12 + Math.random() * 16;
+                    this.alpha = 0.7 + Math.random() * 0.3;
+                    this.engineType = Math.floor(Math.random() * 3);
+                    this.swingWave = Math.random() * Math.PI;
+                }
+                march() {
+                    this.y += this.velocityDown;
+                    this.x += this.velocityCross + Math.sin(this.swingWave) * 0.3;
+                    this.swingWave += 0.02;
+                    this.rotationRad += this.rotationVelocity;
+                    if (this.y > h + 50) this.spawn();
+                }
+                render() {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.rotationRad);
+                    
+                    if (this.engineType === 0) {
+                        ctx.fillStyle = "#c31432";
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.bezierCurveTo(-this.scaleSize/2, -this.scaleSize/2, -this.scaleSize, -this.scaleSize/4, -this.scaleSize, this.scaleSize/3);
+                        ctx.bezierCurveTo(-this.scaleSize, this.scaleSize, -this.scaleSize/3, this.scaleSize*1.3, 0, this.scaleSize*1.8);
+                        ctx.bezierCurveTo(this.scaleSize/3, this.scaleSize*1.3, this.scaleSize, this.scaleSize, this.scaleSize, this.scaleSize/3);
+                        ctx.bezierCurveTo(this.scaleSize, -this.scaleSize/4, this.scaleSize/2, -this.scaleSize/2, 0, 0);
+                        ctx.fill();
+                    } else if (this.engineType === 1) {
+                        ctx.strokeStyle = "#9b111e";
+                        ctx.fillStyle = "#640a14";
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        ctx.arc(0, 0, this.scaleSize/2, 0, Math.PI * 2);
+                        ctx.fill(); ctx.stroke();
+                        ctx.beginPath();
+                        ctx.arc(2, -2, this.scaleSize/4, 0, Math.PI, true);
+                        ctx.stroke();
+                    } else {
+                        ctx.fillStyle = "#e8c0c8";
+                        ctx.beginPath();
+                        ctx.ellipse(0, 0, this.scaleSize/2, this.scaleSize/3, Math.PI/4, 0, Math.PI*2);
+                        ctx.fill();
+                    }
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < 60; i++) cluster.push(new ElegantVectorParticle());
+
+            let threadId;
+            function runLoop() {
+                ctx.clearRect(0, 0, w, h);
+                cluster.forEach(p => { p.march(); p.render(); });
+                threadId = requestAnimationFrame(runLoop);
+            }
+            runLoop();
+
+            setTimeout(() => {
+                cancelAnimationFrame(threadId);
+                canvas.style.transition = 'opacity 3s ease';
+                canvas.style.opacity = '0';
+                setTimeout(() => canvas.classList.remove('active'), 3100);
+            }, 15000);
+        }
+
+        document.getElementById('async-comment-form').addEventListener('submit', function(e) {
+            if(this.action.includes("your_endpoint_here")) {
+                e.preventDefault();
+                alert("Configuration Note: Please set up your Formspree endpoint token inside the HTML form action property.");
+            }
+        });
+    </script>
+</body>
+</html>
